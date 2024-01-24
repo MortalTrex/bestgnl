@@ -55,6 +55,6 @@ bool ft_strchr (const char *str, int c)
 /*
 int	main()
 {
-	printf("%s", ft_strchr("Salut", 'a'));
+	printf("%d", ft_strchr("Salut", 'z'));
 }
 */

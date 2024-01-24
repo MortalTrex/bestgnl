@@ -2,42 +2,50 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-char *ft_createtmp(int	fd, char *buffer)
+char	*ft_createtmp(int fd, char *buffer)
 {
-	char *tmp;
+	char	*tmp;
 	int		cursor;
-	int		i;
 
-	cursor = read(fd, buffer, BUFFER_SIZE);
+	tmp = NULL;
+	//ASSEMBLE LE BUFFER AU TEMPORAIRE
+	while (ft_strchr(buffer, '\n') == false)
+	{
+		cursor = read(fd, buffer, BUFFER_SIZE);
+		buffer[cursor] == '\0';
+		tmp = ft_strjoin(tmp, buffer);
+	}
+	printf("buffer actuel :%s", buffer);
+	return (tmp);
+}
 
-	while (buffer[i] != '\n')
+char *ft_assembleline(char *tmp)
+{
+	char *line;
+	int	i;
+	//CALCUL DE LA TAILLE DE LINE
+	while (tmp[i] != '\n' || tmp[i])
+		i++;
+	line = malloc (sizeof(char) * i + 1);
+	//INSERE CHAQUE CARACTERE DANS LINE
+	while (tmp[i] != '\n' || tmp[i])
 	{
 		tmp[i] = buffer[i];
 		i++;
 	}
-	buffer[cursor] = '\0';
-	return(tmp);
-}
-
-/*
-char *ft_assembleline(char *tmp)
-{
 	return(line);
 }
-*/
 
 char	*get_next_line(int fd)
 {
 	char				*tmp;
-	//char				*line;
-	static char	buffer[BUFFER_SIZE + 1];
-
-	//cursor = read(fd, buffer, BUFFER_SIZE);
+	static char		buffer[BUFFER_SIZE + 1];
+	char				*line;
+	
 	tmp = ft_createtmp(fd, buffer);
-	//buffer[cursor] = '\0';
-	//free(tmp);
-	//line = ft_assembleline(tmp);
-	return (tmp);
+	free(tmp);
+	line = ft_assembleline(tmp);
+	return (line);
 }
 
 int main()
