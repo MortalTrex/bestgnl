@@ -1,68 +1,82 @@
 #include "get_next_line.h"
-#include <stdlib.h>
-#include <stdio.h>
 
-char	*ft_createtmp(int fd, char *buffer)
+char *ft_createtmp(int fd, char *buffer, char *tmp)
 {
-	char	*tmp;
-	int		cursor;
+	int	cursor;
+	int	i = 0;
 
-	tmp = NULL;
-	//ASSEMBLE LE BUFFER AU TEMPORAIRE
-	while (ft_strchr(buffer, '\n') == false)
+	cursor = read(fd, buffer, BUFFER_SIZE);
+	buffer[cursor] = '\0';
+	tmp = ft_strjoin(tmp, buffer);
+	while (tmp[i])
 	{
-		cursor = read(fd, buffer, BUFFER_SIZE);
-		buffer[cursor] == '\0';
-		tmp = ft_strjoin(tmp, buffer);
+		if (tmp[i] == '\n')
+			return(tmp);
+		i++;
 	}
-	printf("buffer actuel :%s", buffer);
+	ft_createtmp(fd, buffer, tmp);
+	//if (!tmp)
+		//return (NULL);
 	return (tmp);
 }
 
-char *ft_assembleline(char *tmp)
+
+
+char	*ft_assembleline(char *tmp)
 {
-	char *line;
+	char	*line;
 	int	i;
+
+	i = 0;
 	//CALCUL DE LA TAILLE DE LINE
-	while (tmp[i] != '\n' || tmp[i])
+	while (tmp[i] != '\n' && tmp[i])
 		i++;
-	line = malloc (sizeof(char) * i + 1);
+	line = malloc (sizeof(char) * (i + 1));
+	if (!line)
+		return (NULL);
 	//INSERE CHAQUE CARACTERE DANS LINE
-	while (tmp[i] != '\n' || tmp[i])
+	i = 0;
+	while (tmp[i] != '\n' && tmp[i])
 	{
-		tmp[i] = buffer[i];
+		line[i] = tmp[i];
 		i++;
 	}
-	return(line);
+	if (tmp[i] == '\n')
+		line[i++] = '\n';
+	line[i] = 0;
+	return (line);
 }
+
 
 char	*get_next_line(int fd)
 {
-	char				*tmp;
 	static char		buffer[BUFFER_SIZE + 1];
-	char				*line;
+	char				*tmp;
+	//char				*line;
 	
-	tmp = ft_createtmp(fd, buffer);
-	free(tmp);
-	line = ft_assembleline(tmp);
-	return (line);
+	tmp = NULL;
+	tmp = ft_createtmp(fd, buffer, tmp);
+	if (!tmp)
+		return (NULL);
+	//printf("\nLE TMP VAUT : %s\n", tmp);
+	//line = ft_assembleline(tmp);
+	//free(tmp);
+	return (tmp);
 }
 
 int main()
 {
-    int fd;
-    char *dest;
+    int	fd = open("test.md", O_RDONLY); 
+    char *res;
   	int	i = 0;
 
-    fd = open("test.md", O_RDONLY); 
-    dest = get_next_line(fd);
-    while (i < 2)
+    while (i < 1)
     {
-			printf("%s", dest);
-			free(dest);
-			dest = get_next_line(fd);
+			res = get_next_line(fd);
+			//printf("La ligne %d est: %s", i, res);
+			printf("%s", res);
+			free(res);
 			i++;
     }
     close(fd);
-    return 0;
 }

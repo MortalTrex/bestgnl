@@ -10,30 +10,60 @@ int	ft_strlen (char *str)
 	return (i);
 }
 
-char	*ft_strjoin (char *s1, char *s2)
+/*
+char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*res;
+	char	*fusion;
 	int		i;
 	int		j;
 
-	i = 0;
-	j = 0;
-	res = malloc (sizeof (char) * (ft_strlen(s1) + ft_strlen(s2)));
-	while(s1[j])
+	i = -1;
+	j = -1;
+	if (!s1)
 	{
-		res[i] = s1[j];
-		i++;
-		j++;
+		s1 = malloc(sizeof(char) * 1);
+		s1[0] = 0;
 	}
-	j = 0;
-	while(s2[j])
-	{
-		res[i] = s2[j];
-		i++;
-		j++;
-	}
-	res[i] = '\0';
-	return (res);
+	if (!s1 || !s2)
+		return (NULL);
+	fusion = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!fusion)
+		return (NULL);
+	while (s1[++i])
+		fusion[i] = s1[i];
+	while (s2[++j])
+		fusion[i + j] = s2[j];
+	fusion[i + j] = 0;
+	free(s1);
+	return (fusion);
+}
+*/
+char *ft_strjoin(char *s1, char *s2)
+{
+    char *fusion;
+    int i;
+    int j;
+
+    i = -1;
+    j = -1;
+    if (!s1)
+    {
+        s1 = malloc(sizeof(char));
+        if (!s1)
+            return (NULL);
+        s1[0] = '\0';
+    }
+    if (!s2)
+        return (NULL);
+    fusion = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+    if (!fusion)
+        return (NULL);
+    while (s1[++i])
+        fusion[i] = s1[i];
+    while (s2[++j])
+        fusion[i + j] = s2[j];
+    fusion[i + j] = '\0';
+    return (fusion);
 }
 
 bool ft_strchr (const char *str, int c)
@@ -55,6 +85,6 @@ bool ft_strchr (const char *str, int c)
 /*
 int	main()
 {
-	printf("%d", ft_strchr("Salut", 'z'));
+	printf("%s", ft_strjoin("Salut", "Ouioui"));
 }
 */
