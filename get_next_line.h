@@ -9,6 +9,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdbool.h>
+# include <string.h>
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE (1 * 1024 * 1024)
 # endif
@@ -19,7 +20,7 @@ bool ft_strchr (const char *str, int c);
 char	*ft_strjoin(char *s1, char *s2);
 
 char	*ft_assembleline(char *tmp);
-char *ft_createtmp(int fd, static char *buffer, char *tmp);
+char *ft_createtmp(int fd, char *buffer, char *tmp);
 void	clean_static(char *buffer);
 
 
