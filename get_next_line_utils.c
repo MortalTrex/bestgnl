@@ -101,7 +101,7 @@ char	*ft_strjoin(char *s1, const char *s2)
 
 
 
-char *ft_strjoin(const char *s1, const char *s2)
+char *ft_strjoin(char *s1, const char *s2)
 {
 	int	i;
 	int	j;
@@ -109,7 +109,12 @@ char *ft_strjoin(const char *s1, const char *s2)
 	i = 0;
 	j = 0;
   if (!s1)
-    s1 = "";
+  {
+		s1 = malloc(sizeof(char) * 1);
+		if (s1 == NULL)
+			return (NULL);
+		s1[0] = '\0';
+	}
   if (!s2)
     return NULL;
   char *dest = malloc(sizeof(char) * (strlen(s1) + strlen(s2) + 1));
@@ -127,6 +132,7 @@ char *ft_strjoin(const char *s1, const char *s2)
     j++;
   }
   dest[i] = '\0';
+	free(s1);
   return (dest);
 }
 

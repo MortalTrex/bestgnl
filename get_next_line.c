@@ -80,17 +80,46 @@ char	*get_next_line(int fd)
 /*
 int main()
 {
-    int	fd = open("test.md", O_RDONLY);
-    char *res;
+    int	fd = open("bible.txt", O_RDONLY);
+    char *line;
   	int	i = 0;
 
-    while (i < 40)
+		line = get_next_line(fd);
+		free(line);
+    do while (line)
     {
-			res = get_next_line(fd);
-			printf("%s", res);
-			free(res);
+			line = get_next_line(fd);
+			if (!line)
+				break;
+			printf("%s", line);
+			free(line);
 			i++;
     }
     close(fd);
 }
 */
+
+int main() 
+{
+    int fd = open("test.md", O_RDONLY);
+    if (fd == -1) 
+  	{
+        perror("Error opening file");
+        return 1;
+    }
+    char *line;
+    int i = 0;
+  	line = get_next_line(fd);
+  	free(line);
+  	while (line)
+    {
+        line = get_next_line(fd);
+        if (!line)
+            break;
+        printf("%s", line);
+        free(line);
+        i++;
+    }
+    close(fd);
+    return 0;
+}
