@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-int	ft_strlen(char *str)
+int	ft_strlen(const char *str)
 {
 	int	i;
 
@@ -25,37 +25,40 @@ int	ft_strlen(char *str)
 }
 
 /*
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
-	char	*fusion;
+	int		sizetotal;
+	char	*res;
 	int		i;
 	int		j;
 
-	i = -1;
-	j = -1;
-	if (!s1)
+	i = 0;
+	sizetotal = ft_strlen(s1) + ft_strlen(s2);
+	res = malloc(sizeof(char) * (sizetotal + 1));
+	if (!res || !s1 || !s2)
+		return (NULL);
+	while (s1[i] != 0)
 	{
-		s1 = malloc(sizeof(char) * 1);
-		s1[0] = 0;
+		res[i] = s1[i];
+		i++;
 	}
-	if (!s1 || !s2)
-		return (NULL);
-	fusion = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!fusion)
-		return (NULL);
-	while (s1[++i])
-		fusion[i] = s1[i];
-	while (s2[++j])
-		fusion[i + j] = s2[j];
-	fusion[i + j] = 0;
-	free(s1);
-	return (fusion);
+	j = 0;
+	while (s2[j] != 0)
+	{
+		res[i] = s2[j];
+		i++;
+		j++;
+	}
+	res[sizetotal] = 0;
+	return (res);
 }
 */
-static void	ft_strjoin_while(char *dest, char *s1, char *s2)
+
+/*
+static void	ft_strjoin_while(char *dest, char *s1, const char *s2)
 {
-	size_t	i;
-	size_t	j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (s1[i] != '\0')
@@ -73,20 +76,20 @@ static void	ft_strjoin_while(char *dest, char *s1, char *s2)
 	dest[i] = '\0';
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, const char *s2)
 {
 	char	*dest;
 
 	if (!s1)
 	{
-		s1 = (char *)malloc(1 * sizeof(char));
+		s1 = malloc(sizeof(char) * 1);
 		if (s1 == NULL)
 			return (NULL);
 		s1[0] = '\0';
 	}
 	if (!s1 || !s2)
 		return (NULL);
-	dest = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	dest = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	memset(dest, 0, (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!dest)
 		return (NULL);
@@ -94,8 +97,40 @@ char	*ft_strjoin(char *s1, char *s2)
 	free(s1);
 	return (dest);
 }
+*/
 
-bool	ft_strchr(const char *str, int c)
+
+
+char *ft_strjoin(const char *s1, const char *s2)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+  if (!s1)
+    s1 = "";
+  if (!s2)
+    return NULL;
+  char *dest = malloc(sizeof(char) * (strlen(s1) + strlen(s2) + 1));
+  if (!dest)
+    return NULL;
+	while (s1[i] != '\0')
+  {
+    dest[i] = s1[i];
+    i++;
+  }
+  while (s2[j] != '\0')
+  {
+    dest[i] = s2[j];
+    i++;
+    j++;
+  }
+  dest[i] = '\0';
+  return (dest);
+}
+
+bool	ft_ischr(const char *str, int c)
 {
 	int	i;
 
@@ -109,6 +144,24 @@ bool	ft_strchr(const char *str, int c)
 		i++;
 	}
 	return (false);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*dup;
+	int		i;
+
+	i = 0;
+	dup = malloc(sizeof(char) * (strlen(s1) + 1));
+	if (dup == NULL)
+		return (NULL);
+	while (s1[i])
+	{
+		dup[i] = s1[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
 }
 
 /*

@@ -12,33 +12,25 @@
 
 #include "get_next_line.h"
 
-static char	*ft_createtmp(int fd, char *tmp, t_data data)
+char	*ft_createtmp(int fd, char *buffer, char *tmp)
 {
 	int		cursor;
 	char	*new_tmp;
-	char	*buffer;
 
-	buffer = (char *)malloc(sizeof(char) * data.buffer_size + 1);
-	if (!buffer)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	cursor = read(fd, buffer, data.buffer_size);
+	cursor = read(fd, buffer, BUFFER_SIZE);
 	if (cursor <= 0)
 	{
 		if (cursor == 0 && tmp != NULL && *tmp != '\0')
-			return (free(buffer), tmp);
-		return (free(tmp), free(buffer), NULL);
+			return (tmp);
+		return (free(tmp), NULL);
 	}
 	buffer[cursor] = '\0';
 	new_tmp = ft_strjoin(tmp, buffer);
 	if (!new_tmp)
-		return (free(tmp), free(buffer), NULL);
-	free(buffer);
-	if (ft_strchr(new_tmp, '\n'))
+		return (free(tmp), NULL);
+	if (ft_ischr(new_tmp, '\n') == true)
 		return (new_tmp);
-	return (ft_createtmp(fd, new_tmp, data));
+	return (ft_createtmp(fd, buffer, new_tmp));
 }
 
 char	*ft_assembleline(char *tmp)
@@ -68,26 +60,24 @@ char	*ft_assembleline(char *tmp)
 
 char	*get_next_line(int fd)
 {
-	t_data		data;
-	static char	*tmp = NULL;
+	static char	buffer[BUFFER_SIZE + 1];
+	static char	*tmp;
 	char		*line;
 	char		*new_tmp;
 
-	data.buffer_size = BUFFER_SIZE;
-	if (data.buffer_size >= 1000)
-		data.buffer_size = 10;
-	if (fd < 0 || data.buffer_size <= 0)
-	{
+	if (fd < 0)
 		return (NULL);
-	}
-	tmp = ft_createtmp(fd, tmp, data);
+	tmp = ft_createtmp(fd, buffer, tmp);
 	if (!tmp)
 		return (NULL);
 	line = ft_assembleline(tmp);
-	new_tmp = strdup(tmp + ft_strlen(line));
-	return (free(tmp), tmp = new_tmp, line);
+	new_tmp = ft_strdup(tmp + ft_strlen(line));
+	free(tmp);
+	tmp = new_tmp;
+	return (line);
 }
 
+/*
 int main()
 {
     int	fd = open("test.md", O_RDONLY);
@@ -97,10 +87,10 @@ int main()
     while (i < 40)
     {
 			res = get_next_line(fd);
-			//printf("La ligne %d est: %s", i, res);
 			printf("%s", res);
 			free(res);
 			i++;
     }
     close(fd);
 }
+*/
