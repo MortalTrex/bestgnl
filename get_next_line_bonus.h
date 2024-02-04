@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbalazs <rbalazs@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rbalazs <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/29 18:21:49 by rbalazs           #+#    #+#             */
-/*   Updated: 2024/01/29 18:38:03 by rbalazs          ###   ########.fr       */
+/*   Created: 2024/02/04 19:23:43 by rbalazs           #+#    #+#             */
+/*   Updated: 2024/02/04 19:23:47 by rbalazs          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <fcntl.h>
 # include <stdbool.h>
@@ -22,7 +22,10 @@
 # include <sys/types.h>
 # include <unistd.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 1024
+# endif
+# ifndef FD_MAX
+#  define FD_MAX 1024
 # endif
 
 char		*get_next_line(int fd);

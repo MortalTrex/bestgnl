@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbalazs <rbalazs@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rbalazs <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/29 18:21:42 by rbalazs           #+#    #+#             */
-/*   Updated: 2024/01/29 18:53:54 by rbalazs          ###   ########.fr       */
+/*   Created: 2024/02/04 19:23:21 by rbalazs           #+#    #+#             */
+/*   Updated: 2024/02/04 19:23:24 by rbalazs          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_createtmp(int fd, char *buffer, char *tmp)
 {
@@ -61,16 +61,20 @@ char	*ft_assembleline(char *tmp)
 char	*get_next_line(int fd)
 {
 	static char	*tmp;
-	char		*buffer;
-	char		*line;
+	char		**buffer;
 	char		*new_tmp;
+	char		*line;
 
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= FD_MAX)
 		return (NULL);
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	buffer = malloc(sizeof(char *) * FD_MAX);
 	if (!buffer)
-		return (NULL);
-	tmp = ft_createtmp(fd, buffer, tmp);
+		return (free(buffer), NULL);
+	buffer[fd] = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer[fd])
+		return (free(buffer), NULL);
+	tmp = ft_createtmp(fd, buffer[fd], tmp);
+	free(buffer[fd]);
 	free(buffer);
 	if (!tmp)
 		return (NULL);
