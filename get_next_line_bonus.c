@@ -60,28 +60,24 @@ char	*ft_assembleline(char *tmp)
 
 char	*get_next_line(int fd)
 {
-	static char	*tmp;
-	char		**buffer;
-	char		*new_tmp;
+	static char	*tmp[FD_MAX];
+	char		*buffer;
 	char		*line;
+	char		*new_tmp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= FD_MAX)
 		return (NULL);
-	buffer = malloc(sizeof(char *) * FD_MAX);
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
-		return (free(buffer), NULL);
-	buffer[fd] = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer[fd])
-		return (free(buffer), NULL);
-	tmp = ft_createtmp(fd, buffer[fd], tmp);
-	free(buffer[fd]);
-	free(buffer);
-	if (!tmp)
 		return (NULL);
-	line = ft_assembleline(tmp);
-	new_tmp = ft_strdup(tmp + ft_strlen(line));
-	free(tmp);
-	tmp = new_tmp;
+	tmp[fd] = ft_createtmp(fd, buffer, tmp[fd]);
+	free(buffer);
+	if (!tmp[fd])
+		return (NULL);
+	line = ft_assembleline(tmp[fd]);
+	new_tmp = ft_strdup(tmp[fd] + ft_strlen(line));
+	free(tmp[fd]);
+	tmp[fd] = new_tmp;
 	return (line);
 }
 
